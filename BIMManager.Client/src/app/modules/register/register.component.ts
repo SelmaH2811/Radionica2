@@ -1,27 +1,26 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
 
-  email = '';
-  password = '';
-  confirmPassword = '';
+  loginForm: FormGroup;
 
-  constructor(private http: HttpClient) {}
-
-  register(): void {
-
-    this.http.post<any>('http://localhost:5000/api/auth/register', {
-      Email: this.email,
-      Password: this.password,
-      ConfirmPassword: this.confirmPassword
-    })
-      .subscribe((response: any) => console.log(response),
-        (err: any) => console.error(err));
+  ngOnInit() {
+    this.createForm();
   }
+
+  private createForm() {
+    this.registerForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
+      confirmPassword: new FormControl('', [Validators.required]),
+    });
+  }
+
 }
